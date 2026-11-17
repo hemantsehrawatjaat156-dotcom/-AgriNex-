@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kisan Crop Doctor - Crop Disease Detection & Treatment</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-group">
+        <div class="logo-icon">
+          <i class="fa-solid fa-wheat-awn"></i>
+        </div>
+        <div>
+          <h1 class="logo-title">Kisan Crop Doctor</h1>
+          <span class="logo-sub">किसान फसल डॉक्टर • AI रोग पहचान व संपूर्ण समाधान</span>
+        </div>
+      </div>
+      <div class="header-badge">
+        <span class="badge-dot"></span>
+        <span>AI Model Active • Indian Crop Dataset</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+    <div class="app-grid">
+
+      <!-- LEFT COLUMN: Image Upload & Preset Samples -->
+      <section class="card upload-card">
+        <div class="card-head">
+          <h2><i class="fa-solid fa-camera"></i> Upload Crop Photo</h2>
+          <span class="card-hint">फसल की फोटो चुनें</span>
+        </div>
+
+        <!-- 1-Click Preset Samples -->
+        <div class="samples-wrapper">
+          <label class="section-label">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> 
+            Quick Test Samples (तुरंत परीक्षण हेतु नमूना चुनें):
+          </label>
+          <div class="samples-scroll" id="samplesContainer">
+            <!-- Dynamically loaded samples from Indian dataset -->
+          </div>
+        </div>
+
+        <!-- File Upload Form -->
+        <form id="uploadForm" class="upload-form">
+          <div class="drop-area" id="dropArea">
+            <input type="file" id="fileInput" accept="image/*" class="file-hidden">
+            <div class="drop-idle" id="dropIdle">
+              <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+              <p><strong>Click to browse</strong> or drag & drop crop leaf photo</p>
+              <span>Supports JPG, PNG, WEBP from Phone or Camera</span>
+            </div>
+            <div class="drop-preview" id="dropPreview" style="display: none;">
+              <img id="previewImg" src="" alt="Selected Crop">
+              <button type="button" class="btn-clear" id="clearBtn" title="Remove image">&times;</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-analyze" id="analyzeBtn">
+            <i class="fa-solid fa-magnifying-glass"></i> Detect Disease & Get Solutions (रोग जांचें)
+          </button>
+        </form>
+
+        <div class="tips-box">
+          <strong><i class="fa-solid fa-lightbulb"></i> Photo Tip for Best Accuracy:</strong>
+          <p>Take a clear close-up photo of the affected leaf or plant under natural daylight. Avoid heavy blur or shadows.</p>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: Disease Diagnosis & Solutions -->
+      <section class="card results-card" id="resultsSection">
+        <div class="card-head">
+          <h2><i class="fa-solid fa-clipboard-check"></i> Diagnosis & Treatment Plan</h2>
+          <span class="status-pill" id="resultStatus">Waiting for Photo</span>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-art">
+            <i class="fa-solid fa-leaf"></i>
+          </div>
+          <h3>No Crop Photo Analyzed Yet</h3>
+          <p>Upload a photograph of your crop leaf or click any sample on the left to instantly identify the disease and view organic & chemical treatments.</p>
+        </div>
+
+        <!-- Loaded Diagnosis Content -->
+        <div class="diagnosis-wrapper" id="diagnosisWrapper" style="display: none;">
+          
+          <!-- Diagnosis Header Box -->
+          <div class="diag-header-box">
+            <div class="diag-main-info">
+              <span class="crop-chip" id="diagCrop">Wheat (गेहूँ)</span>
+              <h3 class="diag-name" id="diagName">Yellow Rust / Stripe Rust</h3>
+              <p class="diag-sci" id="diagSci">Puccinia striiformis</p>
+              <div class="diag-tags">
+                <span class="badge" id="diagCategory">Fungal Disease</span>
+                <span class="badge" id="diagSeverity">High Severity</span>
+              </div>
+            </div>
+            <div class="conf-gauge">
+              <div class="conf-percent" id="diagConf">94%</div>
+              <span class="conf-label">Confidence</span>
+            </div>
+          </div>
+
+          <!-- Description & Symptoms -->
+          <div class="diag-desc-box">
+            <h4><i class="fa-solid fa-circle-info"></i> About This Condition / रोग विवरण</h4>
+            <p id="diagDesc"></p>
+            <div class="symptoms-block">
+              <strong>Key Symptoms Observed (प्रमुख लक्षण):</strong>
+              <ul id="diagSymptoms" class="symptoms-list"></ul>
+            </div>
+          </div>
+
+          <!-- Solution Tabs -->
+          <div class="solutions-card">
+            <div class="solution-nav">
+              <button class="sol-tab active" data-target="tabOrganic">
+                <i class="fa-solid fa-seedling"></i> Organic Solutions (जैविक)
+              </button>
+              <button class="sol-tab" data-target="tabChemical">
+                <i class="fa-solid fa-flask-vial"></i> Chemical Medicines (रासायनिक)
+              </button>
+              <button class="sol-tab" data-target="tabFarm">
+                <i class="fa-solid fa-faucet-drip"></i> Farm & Irrigation (प्रबंधन)
+              </button>
+            </div>
+
+            <!-- Tab 1: Organic -->
+            <div class="sol-pane active" id="tabOrganic">
+              <div class="pane-header">
+                <i class="fa-solid fa-leaf text-green"></i>
+                <div>
+                  <h5>Certified Organic & Natural Biological Treatments</h5>
+                  <span>Safe for soil, environment, and friendly insects (घरेलू व जैविक उपाय)</span>
+                </div>
+              </div>
+              <ul class="treatment-list" id="organicList"></ul>
+            </div>
+
+            <!-- Tab 2: Chemical -->
+            <div class="sol-pane" id="tabChemical">
+              <div class="pane-header">
+                <i class="fa-solid fa-vial text-blue"></i>
+                <div>
+                  <h5>Targeted Chemical Sprays & Standard Dosages</h5>
+                  <span>Recommended fungicides & insecticides with exact per-acre dosage (दवा व सही मात्रा)</span>
+                </div>
+              </div>
+              <ul class="treatment-list" id="chemicalList"></ul>
+            </div>
+
+            <!-- Tab 3: Farm & Irrigation Management -->
+            <div class="sol-pane" id="tabFarm">
+              <div class="pane-header">
+                <i class="fa-solid fa-tractor text-amber"></i>
+                <div>
+                  <h5>Irrigation, Drainage & Agronomic Care</h5>
+                  <span>Water scheduling, nitrogen balance, and prevention tips (सिंचाई व खेत प्रबंधन)</span>
+                </div>
+              </div>
+              <ul class="treatment-list" id="farmList"></ul>
+            </div>
+          </div>
+
+          <!-- Print / Download Button -->
+          <div class="diag-footer">
+            <button class="btn btn-outline" onclick="window.print()">
+              <i class="fa-solid fa-print"></i> Print / Save Prescription (पर्चा प्रिंट करें)
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p><strong>Kisan Crop Doctor</strong> • AI-Powered Crop Disease Diagnosis & Farmer Treatment Assistant</p>
+    <p class="footer-sub">Empowering farmers with instant organic and chemical crop protection solutions.</p>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
