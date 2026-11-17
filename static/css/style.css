@@ -44,6 +44,7 @@ body {
 }
 
 .header-container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   display: flex;
@@ -51,12 +52,18 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+  min-width: 0;
 }
 
 .logo-group {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
+}
+
+.logo-group > div:last-child {
+  min-width: 0;
 }
 
 .logo-icon {
@@ -82,6 +89,7 @@ body {
   font-size: 0.85rem;
   color: #d1fae5;
   display: block;
+  overflow-wrap: anywhere;
 }
 
 .header-badge {
@@ -94,6 +102,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  max-width: 100%;
 }
 
 .badge-dot {
@@ -112,6 +121,7 @@ body {
 
 /* Layout */
 .main-content {
+  width: 100%;
   max-width: 1280px;
   margin: 28px auto;
   padding: 0 18px 40px;
@@ -119,7 +129,7 @@ body {
 
 .app-grid {
   display: grid;
-  grid-template-columns: 1fr 1.35fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
   gap: 24px;
 }
 
@@ -131,6 +141,7 @@ body {
 
 /* Cards */
 .card {
+  min-width: 0;
   background-color: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -142,18 +153,25 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   padding-bottom: 14px;
   margin-bottom: 16px;
   border-bottom: 1px solid var(--border);
 }
 
 .card-head h2 {
+  min-width: 0;
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--primary);
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.card-head h2,
+.status-pill {
+  overflow-wrap: anywhere;
 }
 
 .card-hint {
@@ -204,6 +222,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex: 0 0 auto;
 }
 
 .sample-chip:hover {
@@ -219,6 +238,7 @@ body {
 
 /* Upload Area */
 .drop-area {
+  width: 100%;
   border: 2px dashed #cbd5e1;
   border-radius: var(--radius-sm);
   background-color: #f8fafc;
@@ -258,6 +278,7 @@ body {
 .drop-idle p {
   font-size: 0.95rem;
   margin-bottom: 4px;
+  overflow-wrap: anywhere;
 }
 
 .drop-idle span {
@@ -384,7 +405,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   margin-bottom: 18px;
+}
+
+.diag-main-info {
+  min-width: 0;
 }
 
 .crop-chip {
@@ -400,6 +426,7 @@ body {
   font-weight: 800;
   color: var(--primary-dark);
   margin: 2px 0;
+  overflow-wrap: anywhere;
 }
 
 .diag-sci {
@@ -407,6 +434,7 @@ body {
   color: var(--text-muted);
   font-style: italic;
   margin-bottom: 8px;
+  overflow-wrap: anywhere;
 }
 
 .diag-tags {
@@ -420,6 +448,7 @@ body {
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 12px;
+  overflow-wrap: anywhere;
 }
 
 .badge-danger { background-color: #fee2e2; color: #991b1b; }
@@ -499,6 +528,7 @@ body {
   background-color: #f1f5f9;
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
 .sol-tab {
@@ -511,6 +541,7 @@ body {
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s;
+  flex: 0 0 auto;
 }
 
 .sol-tab.active {
@@ -562,6 +593,7 @@ body {
   padding-left: 20px;
   font-size: 0.86rem;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
 .treatment-list li {
@@ -582,11 +614,100 @@ body {
   border-top: 1px solid var(--border);
   margin-top: 40px;
   background-color: #fff;
+  overflow-wrap: anywhere;
 }
 
 .footer-sub {
   font-size: 0.74rem;
   margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    padding: 14px 16px;
+  }
+
+  .logo-group {
+    gap: 10px;
+  }
+
+  .logo-title {
+    font-size: 1.2rem;
+  }
+
+  .logo-sub {
+    font-size: 0.75rem;
+  }
+
+  .header-badge {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+
+  .main-content {
+    margin: 18px auto;
+    padding: 0 12px 28px;
+  }
+
+  .app-grid {
+    gap: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .card-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .card-head h2 {
+    font-size: 1rem;
+  }
+
+  .card-hint,
+  .status-pill {
+    margin-left: 28px;
+    flex-shrink: 0;
+    font-size: 0.68rem;
+  }
+
+  .diag-header-box {
+    padding: 14px;
+  }
+
+  .diag-name {
+    font-size: 1.15rem;
+  }
+
+  .sol-pane {
+    padding: 14px;
+  }
+
+  .pane-header {
+    align-items: flex-start;
+  }
+
+  .app-footer {
+    padding: 20px 14px;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .diag-header-box {
+    align-items: flex-start;
+  }
+
+  .conf-gauge {
+    width: 68px;
+    height: 68px;
+  }
+
+  .conf-percent {
+    font-size: 1.1rem;
+  }
 }
 
 @media print {
