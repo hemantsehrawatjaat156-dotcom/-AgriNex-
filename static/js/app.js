@@ -37,6 +37,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentFile = null;
   let currentSampleName = null;
 
+  function removeHindi(value) {
+    return String(value)
+      .replace(/\s*\([^)]*[\u0900-\u097F][^)]*\)/g, "")
+      .replace(/[\u0900-\u097F]+/g, "")
+      .replace(/\s*[/,]\s*(?=[.,;:!?]|$)/g, "")
+      .replace(/\s+([,.;:!?])/g, "$1")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+  }
+
   // 1. Solution Tab Navigation
   solTabs.forEach(tab => {
     tab.addEventListener("click", () => {
@@ -60,8 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
           const chip = document.createElement("button");
           chip.type = "button";
           chip.className = "sample-chip";
-          chip.innerHTML = `<i class="fa-solid fa-leaf"></i> ${sample.name}`;
-          chip.title = sample.description;
+          const icon = document.createElement("i");
+          icon.className = "fa-solid fa-leaf";
+          chip.append(icon, document.createTextNode(` ${removeHindi(sample.name)}`));
+          chip.title = removeHindi(sample.description);
           chip.addEventListener("click", () => selectSample(sample, chip));
           samplesContainer.appendChild(chip);
         });
@@ -141,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     if (!currentFile && !currentSampleName) {
-      alert("कृपया फसल की फोटो चुनें या अपलोड करें। (Please upload a crop image or select a sample)");
+      alert("Please upload a crop image or select a sample.");
       return;
     }
 
@@ -175,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
       resultStatus.textContent = "Error";
     } finally {
       analyzeBtn.disabled = false;
-      analyzeBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> Detect Disease & Get Solutions (रोग जांचें)`;
+      analyzeBtn.innerHTML = `<i class="fa-solid fa-magnifying-glass"></i> Detect Disease & Get Solutions`;
     }
   });
 
@@ -187,25 +199,25 @@ document.addEventListener("DOMContentLoaded", () => {
     resultStatus.textContent = "Prescription Ready";
     resultStatus.className = "status-pill";
 
-    diagCrop.textContent = data.crop_name;
-    diagName.textContent = data.condition_name;
-    diagSci.textContent = data.scientific_name;
+    diagCrop.textContent = removeHindi(data.crop_name);
+    diagName.textContent = removeHindi(data.condition_name);
+    diagSci.textContent = removeHindi(data.scientific_name);
     diagConf.textContent = `${data.confidence_percent}%`;
 
     // Category and Severity
-    diagCategory.textContent = data.category;
+    diagCategory.textContent = removeHindi(data.category);
     diagCategory.className = "badge badge-info";
 
-    diagSeverity.textContent = `Severity: ${data.severity}`;
+    diagSeverity.textContent = `Severity: ${removeHindi(data.severity)}`;
     diagSeverity.className = `badge badge-${data.severity_color}`;
 
     // Description & Symptoms
-    diagDesc.textContent = data.description;
+    diagDesc.textContent = removeHindi(data.description);
     
     diagSymptoms.innerHTML = "";
     (data.symptoms || []).forEach(sym => {
       const li = document.createElement("li");
-      li.textContent = sym;
+      li.textContent = removeHindi(sym);
       diagSymptoms.appendChild(li);
     });
 
@@ -224,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
     targetElement.innerHTML = "";
     (items || []).forEach(item => {
       const li = document.createElement("li");
-      li.innerHTML = item;
+      li.innerHTML = removeHindi(item);
       targetElement.appendChild(li);
     });
   }

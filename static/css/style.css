@@ -29,7 +29,7 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
   background-color: var(--bg-page);
   color: var(--text-dark);
   line-height: 1.5;
